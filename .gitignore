@@ -1,0 +1,9 @@
+__pycache__
+exp
+logs
+slurm
+gpu.sh
+*.out
+/model
+/data_handler
+*.txt
