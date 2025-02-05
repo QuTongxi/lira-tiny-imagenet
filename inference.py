@@ -17,30 +17,53 @@ from tqdm import tqdm
 
 from wide_resnet import WideResNet
 
+import sys; sys.path.append('./tiny_imagenet')
+from TinyImagenet import * # type: ignore
+
 parser = argparse.ArgumentParser()
 parser.add_argument("--n_queries", default=2, type=int)
 parser.add_argument("--model", default="resnet18", type=str)
 parser.add_argument("--savedir", default="exp/cifar10", type=str)
+parser.add_argument("--dataset",default='tiny-imagenet',type=str)
+parser.add_argument("--dpath",default='',type=str)
 args = parser.parse_args()
 
 _IMAGENET_RGB_MEANS = [0.4914, 0.4822, 0.4465]
 _IMAGENET_RGB_STDS = [0.2470, 0.2435, 0.2616]
+
+def get_dataset(dataset, root):
+    if dataset == 'cifar10':
+        transform = transforms.Compose(
+            [
+                transforms.RandomHorizontalFlip(),
+                transforms.RandomCrop(32, padding=4),
+                transforms.ToTensor(),
+                transforms.Normalize(_IMAGENET_RGB_MEANS, _IMAGENET_RGB_STDS),
+            ]
+        )
+        datadir = root
+        train_ds = CIFAR10(root=datadir, train=True, download=True, transform=transform)
+        return train_ds
+    elif dataset == 'tiny-imagenet':
+        transform = transforms.Compose(
+            [
+                transforms.RandomHorizontalFlip(),
+                transforms.RandomCrop(64, padding=4),
+                transforms.ToTensor(),
+                transforms.Normalize((0.485,0.456,0.406), (0.229,0.224,0.225)),
+            ]
+        )  
+        train_ds = TinyImageNet(root, train=True, transform=transform) # type: ignore
+        return train_ds
+    else:
+        raise NotImplementedError
 
 @torch.no_grad()
 def run():
     DEVICE = torch.device("cuda") if torch.cuda.is_available() else torch.device("mps")
 
     # Dataset
-    transform = transforms.Compose(
-        [
-            transforms.RandomHorizontalFlip(),
-            transforms.RandomCrop(32, padding=4),
-            transforms.ToTensor(),
-            transforms.Normalize(_IMAGENET_RGB_MEANS, _IMAGENET_RGB_STDS),
-        ]
-    )
-    datadir = '。/dataset'
-    train_ds = CIFAR10(root=datadir, train=True, download=True, transform=transform)
+    train_ds = get_dataset(args.dataset, args.dpath)
     train_dl = DataLoader(train_ds, batch_size=128, shuffle=False, num_workers=4)
 
     # Infer the logits with multiple queries
@@ -50,9 +73,14 @@ def run():
         elif args.model == "wresnet28-10":
             m = WideResNet(28, 10, 0.3, 10)
         elif args.model == "resnet18":
-            m = models.resnet18(weights=None, num_classes=10)
-            m.conv1 = nn.Conv2d(3, 64, kernel_size=3, stride=1, padding=1, bias=False)
-            m.maxpool = nn.Identity()
+            if args.dataset == 'cifar10':
+                m = models.resnet18(weights=None, num_classes=10)
+                m.conv1 = nn.Conv2d(3, 64, kernel_size=3, stride=1, padding=1, bias=False)
+                m.maxpool = nn.Identity()
+            elif args.dataset == 'tiny-imagenet':
+                m = models.resnet18(weights=None, num_classes=200)
+            else:
+                raise NotImplementedError
         else:
             raise NotImplementedError
         m.load_state_dict(torch.load(os.path.join(args.savedir, path, "model.pt")))

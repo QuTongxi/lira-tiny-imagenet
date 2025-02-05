@@ -27,6 +27,8 @@ def get_acc(model, dl):
 
     return acc.item() * 100.0
 
+
+
 def get_loaders(data:str, nsamples:int, batchsize:int, keep_file:str):
     _IMAGENET_RGB_MEANS = [0.4914, 0.4822, 0.4465]
     _IMAGENET_RGB_STDS = [0.2470, 0.2435, 0.2616]

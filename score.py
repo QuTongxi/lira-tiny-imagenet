@@ -24,8 +24,13 @@ from pathlib import Path
 import numpy as np
 from torchvision.datasets import CIFAR10
 
+import sys; sys.path.append('./tiny_imagenet')
+from TinyImagenet import * # type: ignore
+
 parser = argparse.ArgumentParser()
 parser.add_argument("--savedir", default="exp/cifar10", type=str)
+parser.add_argument("--dpath",default='',type=str)
+parser.add_argument("--dataset",default='tiny-imagenet',type=str)
 args = parser.parse_args()
 
 
@@ -56,10 +61,19 @@ def load_one(path):
 
 
 def get_labels():
-    # datadir = Path().home() / "opt/data/cifar"
-    datadir = './dataset'
-    train_ds = CIFAR10(root=datadir, train=True, download=True)
-    return np.array(train_ds.targets)
+    if args.dataset == 'cifar10':
+        dataset = CIFAR10(root=args.dpath, train=True, download=False)
+        return np.array(dataset.targets)
+    elif args.dataset == 'tiny-imagenet':
+        dataset = TinyImageNet(args.dpath, train=True, transform=None) # type: ignore
+        all_labels = []
+        for i in range(len(dataset)):
+            _, label = dataset[i]  # 获取第 i 个样本的标签
+            all_labels.append(label)
+
+        return np.array(all_labels)
+    else:
+        raise NotImplementedError
 
 
 def load_stats():

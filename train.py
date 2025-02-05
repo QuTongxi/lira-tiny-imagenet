@@ -22,6 +22,9 @@ from tqdm import tqdm
 from wide_resnet import WideResNet
 import matplotlib.pyplot as plt
 
+import sys; sys.path.append('./tiny_imagenet')
+from TinyImagenet import * # type: ignore
+
 parser = argparse.ArgumentParser()
 parser.add_argument("--lr", default=0.1, type=float)
 parser.add_argument("--epochs", default=1, type=int)
@@ -32,9 +35,52 @@ parser.add_argument("--pkeep", default=0.5, type=float)
 parser.add_argument("--savedir", default="exp/cifar10", type=str)
 parser.add_argument("--debug", action="store_true")
 parser.add_argument("--seed", default=43, type=int)
+parser.add_argument("--dpath",default='',type=str)
+parser.add_argument("--dataset",default='tiny-imagenet',type=str)
 args = parser.parse_args()
 
 DEVICE = torch.device("cuda") if torch.cuda.is_available() else torch.device("mps")
+
+def get_dataset(dataset, root):
+    if dataset == 'cifar10':
+        train_transform = transforms.Compose(
+            [
+                transforms.RandomHorizontalFlip(),
+                transforms.RandomCrop(32, padding=4),
+                transforms.ToTensor(),
+                transforms.Normalize([0.4914, 0.4822, 0.4465], [0.2470, 0.2435, 0.2616]),
+            ]
+        )
+        test_transform = transforms.Compose(
+            [
+                transforms.ToTensor(),
+                transforms.Normalize([0.4914, 0.4822, 0.4465], [0.2470, 0.2435, 0.2616]),
+            ]
+        )
+        datadir = root
+        train_ds = CIFAR10(root=datadir, train=True, download=True, transform=train_transform)
+        test_ds = CIFAR10(root=datadir, train=False, download=True, transform=test_transform)
+        return train_ds,test_ds
+    elif dataset == 'tiny-imagenet':
+        train_transform = transforms.Compose(
+            [
+                transforms.RandomHorizontalFlip(),
+                transforms.RandomCrop(64, padding=4),
+                transforms.ToTensor(),
+                transforms.Normalize((0.485,0.456,0.406), (0.229,0.224,0.225)),
+            ]
+        )
+        test_transform = transforms.Compose(
+            [
+                transforms.ToTensor(),
+                transforms.Normalize((0.485,0.456,0.406), (0.229,0.224,0.225)),
+            ]
+        )
+        train_ds = TinyImageNet(root, train=True, transform=train_transform) # type: ignore
+        test_ds = TinyImageNet(root, train=False, transform=test_transform) # type: ignore
+        return train_ds,test_ds
+    else:
+        raise NotImplementedError
 
 
 def run():
@@ -45,23 +91,7 @@ def run():
     wandb.config.update(args)
 
     # Dataset
-    train_transform = transforms.Compose(
-        [
-            transforms.RandomHorizontalFlip(),
-            transforms.RandomCrop(32, padding=4),
-            transforms.ToTensor(),
-            transforms.Normalize([0.4914, 0.4822, 0.4465], [0.2470, 0.2435, 0.2616]),
-        ]
-    )
-    test_transform = transforms.Compose(
-        [
-            transforms.ToTensor(),
-            transforms.Normalize([0.4914, 0.4822, 0.4465], [0.2470, 0.2435, 0.2616]),
-        ]
-    )
-    datadir = './dataset'
-    train_ds = CIFAR10(root=datadir, train=True, download=True, transform=train_transform)
-    test_ds = CIFAR10(root=datadir, train=False, download=True, transform=test_transform)
+
 
     # Compute the IN / OUT subset:
     # If we run each experiment independently then even after a lot of trials
@@ -69,7 +99,8 @@ def run():
     # or always excluded. So instead, with experiment IDs, we guarantee that
     # after `args.n_shadows` are done, each example is seen exactly half
     # of the time in train, and half of the time not in train.
-
+ 
+    train_ds, test_ds = get_dataset('tiny-imagenet', root=args.dpath)
     size = len(train_ds)
 
     np.random.seed(args.seed)
@@ -99,9 +130,9 @@ def run():
     elif args.model == "wresnet28-10":
         m = WideResNet(28, 10, 0.3, 10)
     elif args.model == "resnet18":
-        m = models.resnet18(weights=None, num_classes=10)
-        m.conv1 = nn.Conv2d(3, 64, kernel_size=3, stride=1, padding=1, bias=False)
-        m.maxpool = nn.Identity()
+        m = models.resnet18(weights=None, num_classes=200)
+        # m.conv1 = nn.Conv2d(3, 64, kernel_size=3, stride=1, padding=1, bias=False)
+        # m.maxpool = nn.Identity()
     else:
         raise NotImplementedError
     m = m.to(DEVICE)
@@ -136,7 +167,7 @@ def run():
         test_acc_list.append(test_acc)
 
     plt.figure(figsize=(10, 5))
-    plt.plot(range(1, args.epochs + 1), val_acc_list, label="Validation Accuracy")
+    plt.plot(range(1, args.epochs + 1), val_acc_list, label="Train Accuracy")
     plt.plot(range(1, args.epochs + 1), test_acc_list, label="Test Accuracy")
     plt.xlabel("Epochs")
     plt.ylabel("Accuracy")
