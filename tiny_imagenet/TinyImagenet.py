@@ -7,6 +7,15 @@ import os
 from PIL import Image
 from torchvision.datasets import CIFAR10
 
+train_trans = transforms.Compose(
+        [
+            transforms.RandomHorizontalFlip(),
+            transforms.RandomCrop(64, padding=4),
+            transforms.ToTensor(),
+            transforms.Normalize((0.485,0.456,0.406), (0.229,0.224,0.225)),
+        ]
+    )
+
 class TinyImageNet(Dataset):
     def __init__(self, root, train=True, transform=None):
         self.Train = train

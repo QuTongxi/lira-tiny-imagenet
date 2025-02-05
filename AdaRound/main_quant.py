@@ -5,6 +5,31 @@ from torchvision import models
 from utils import *
 from adaround import layer_reconstruction
 import os
+def select_best_gpu():
+    import pynvml
+    pynvml.nvmlInit()  # 初始化
+    gpu_count = pynvml.nvmlDeviceGetCount()
+    if gpu_count == 0:
+        device = "cpu"
+    else:
+        gpu_id, max_free_mem = 0, 0.
+        for i in range(gpu_count):
+            handle = pynvml.nvmlDeviceGetHandleByIndex(i)
+            memory_free = round(pynvml.nvmlDeviceGetMemoryInfo(handle).free/(1024*1024*1024), 3)  # 单位GB
+            if memory_free > max_free_mem:
+                gpu_id = i
+                max_free_mem = memory_free
+        device = f"cuda:{gpu_id}"
+        print(f"total have {gpu_count} gpus, max gpu free memory is {max_free_mem}, which gpu id is {gpu_id}")
+    return device
+
+
+available_device = select_best_gpu()
+
+# 方法1：直接通过os全局设置GPU    
+import os
+if available_device.startswith("cuda"):
+    os.environ['CUDA_VISIBLE_DEVICES'] = available_device.split(":")[1]
 
 parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 
@@ -18,18 +43,32 @@ parser.add_argument('--keep',type=str,default='')
 parser.add_argument('--logit_save_path',type=str,default='../dat/')
 parser.add_argument('--nqueries',type=int,default=2)
 
+parser.add_argument('--dataset',type=str,default='tiny-imagenet')
+
 args = parser.parse_args()
 
 seed_all(args.seed)
 
-model= models.resnet18(num_classes = 10, weights = None)
+nclasses = 0
+if args.dataset == 'tiny-imagenet':
+    nclasses = 200
+elif args.dataset == 'cifar10':
+    nclasses = 10
+else:
+    raise NotImplementedError
+model = models.resnet18(weights=None, num_classes=nclasses)
 model.conv1 = nn.Conv2d(3, 64, kernel_size=3, stride=1, padding=1, bias=False)
 model.maxpool = nn.Identity()
 model.load_state_dict(torch.load(args.load,weights_only=True))
 model.cuda()
 model.eval()
 
-trainloader, caliloader, testloader = get_loaders(args.datapath, nsamples=1024, batchsize=32,keep_file = args.keep)
+# trainloader, caliloader, testloader = get_loaders(args.datapath, nsamples=1024, batchsize=32,keep_file = args.keep)
+import sys; sys.path.append('../tiny_imagenet')
+from TinyImagenet import *
+
+caliloader, testloader = get_dataloaders(args.dataset, args.datapath, nsamples=1024, batchsize=32, keep_file = args.keep)
+trainloader = TinyImageNet(root=args.datapath, train=True, transform=train_trans)
 
 print(f'accuracy: {get_acc(model, testloader):.4f}')
 
@@ -95,7 +134,7 @@ def save_train_test_accuracy(model, trainloader, testloader):
 
 if args.save:
     torch.save(model.state_dict(), args.save)
-    save_train_test_accuracy(model, trainloader, testloader)
+    save_train_test_accuracy(model, caliloader, testloader)
         
 def run_inference(queries, train_dl, model, save_dir):
     model.eval()

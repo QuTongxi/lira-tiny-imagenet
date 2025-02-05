@@ -2,9 +2,33 @@
 # https://github.com/tensorflow/privacy/blob/master/research/mi_lira_2021/train.py
 #
 # author: Chenxiang Zhang (orientino)
+def select_best_gpu():
+    import pynvml
+    pynvml.nvmlInit()  # 初始化
+    gpu_count = pynvml.nvmlDeviceGetCount()
+    if gpu_count == 0:
+        device = "cpu"
+    else:
+        gpu_id, max_free_mem = 0, 0.
+        for i in range(gpu_count):
+            handle = pynvml.nvmlDeviceGetHandleByIndex(i)
+            memory_free = round(pynvml.nvmlDeviceGetMemoryInfo(handle).free/(1024*1024*1024), 3)  # 单位GB
+            if memory_free > max_free_mem:
+                gpu_id = i
+                max_free_mem = memory_free
+        device = f"cuda:{gpu_id}"
+        print(f"total have {gpu_count} gpus, max gpu free memory is {max_free_mem}, which gpu id is {gpu_id}")
+    return device
+
+
+available_device = select_best_gpu()
+
+# 方法1：直接通过os全局设置GPU    
+import os
+if available_device.startswith("cuda"):
+    os.environ['CUDA_VISIBLE_DEVICES'] = available_device.split(":")[1]
 
 import argparse
-import os
 import time
 from pathlib import Path
 
