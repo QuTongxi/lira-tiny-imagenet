@@ -1,5 +1,6 @@
 {
     "python.analysis.extraPaths": [
-        "./tiny_imagenet"
+        "./tiny_imagenet",
+        "./datasets"
     ]
 }

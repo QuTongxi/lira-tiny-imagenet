@@ -70,9 +70,18 @@ def get_loaders(data:str, nsamples:int, batchsize:int, keep_file:str):
 
 
 
-def replace_with_quant_modules(model, weight_quant_params, act_quant_params):
+def replace_with_quant_modules(model, weight_quant_params, act_quant_params):    
     for name, module in model.named_children():
         if isinstance(module, (nn.Conv2d, nn.Linear)):
+            if 'fc' in name:
+                wq_params = {'n_bits': 4, 'channel_wise': True, 'scale_method': 'mse', "symmetric": False}
+                quant_module = QuantModule(
+                    org_module=module,
+                    weight_quant_params=wq_params,
+                    act_quant_params=act_quant_params
+                )
+                setattr(model, name, quant_module)
+                continue
             quant_module = QuantModule(
                 org_module=module,
                 weight_quant_params=weight_quant_params,

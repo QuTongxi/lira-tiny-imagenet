@@ -1,0 +1,433 @@
+total have 2 gpus, max gpu free memory is 79.24, which gpu id is 0
+3125 3125
+accuracy: 65.7600
+evaluating before AdaRound: 52.93
+Reconstruction for layer conv1
+Init alpha to be FP32
+Total loss:	0.849 (rec:0.001, round:0.848)	b=18.88	count=4999
+Total loss:	0.511 (rec:0.002, round:0.509)	b=13.25	count=9998
+Total loss:	0.221 (rec:0.007, round:0.213)	b=7.63	count=14997
+Total loss:	0.040 (rec:0.024, round:0.016)	b=2.00	count=19996
+Reconstruction for layer layer1.0.conv1
+Init alpha to be FP32
+Total loss:	8.528 (rec:0.001, round:8.528)	b=18.88	count=4999
+Total loss:	3.614 (rec:0.001, round:3.613)	b=13.25	count=9998
+Total loss:	0.442 (rec:0.001, round:0.441)	b=7.63	count=14997
+Total loss:	0.002 (rec:0.002, round:0.000)	b=2.00	count=19996
+Reconstruction for layer layer1.0.conv2
+Init alpha to be FP32
+Total loss:	12.632 (rec:0.000, round:12.632)	b=18.88	count=4999
+Total loss:	5.227 (rec:0.000, round:5.226)	b=13.25	count=9998
+Total loss:	0.385 (rec:0.001, round:0.384)	b=7.63	count=14997
+Total loss:	0.001 (rec:0.001, round:0.000)	b=2.00	count=19996
+Reconstruction for layer layer1.1.conv1
+Init alpha to be FP32
+Total loss:	15.319 (rec:0.002, round:15.318)	b=18.88	count=4999
+Total loss:	6.719 (rec:0.002, round:6.717)	b=13.25	count=9998
+Total loss:	0.637 (rec:0.003, round:0.634)	b=7.63	count=14997
+Total loss:	0.004 (rec:0.004, round:0.000)	b=2.00	count=19996
+Reconstruction for layer layer1.1.conv2
+Init alpha to be FP32
+Total loss:	13.775 (rec:0.000, round:13.775)	b=18.88	count=4999
+Total loss:	6.330 (rec:0.001, round:6.330)	b=13.25	count=9998
+Total loss:	0.641 (rec:0.001, round:0.640)	b=7.63	count=14997
+Total loss:	0.001 (rec:0.001, round:0.000)	b=2.00	count=19996
+Reconstruction for layer layer2.0.conv1
+Init alpha to be FP32
+Total loss:	32.308 (rec:0.006, round:32.302)	b=18.88	count=4999
+Total loss:	17.030 (rec:0.006, round:17.024)	b=13.25	count=9998
+Total loss:	2.413 (rec:0.008, round:2.404)	b=7.63	count=14997
+Total loss:	0.009 (rec:0.009, round:0.000)	b=2.00	count=19996
+Reconstruction for layer layer2.0.conv2
+Init alpha to be FP32
+Total loss:	59.923 (rec:0.002, round:59.921)	b=18.88	count=4999
+Total loss:	32.197 (rec:0.002, round:32.195)	b=13.25	count=9998
+Total loss:	5.413 (rec:0.003, round:5.410)	b=7.63	count=14997
+Total loss:	0.003 (rec:0.003, round:0.000)	b=2.00	count=19996
+Reconstruction for layer layer2.0.downsample.0
+Init alpha to be FP32
+Total loss:	3.192 (rec:0.002, round:3.190)	b=18.88	count=4999
+Total loss:	1.961 (rec:0.003, round:1.958)	b=13.25	count=9998
+Total loss:	0.563 (rec:0.005, round:0.558)	b=7.63	count=14997
+Total loss:	0.008 (rec:0.008, round:0.000)	b=2.00	count=19996
+Reconstruction for layer layer2.1.conv1
+Init alpha to be FP32
+Total loss:	56.250 (rec:0.008, round:56.242)	b=18.88	count=4999
+Total loss:	31.020 (rec:0.008, round:31.012)	b=13.25	count=9998
+Total loss:	6.890 (rec:0.011, round:6.879)	b=7.63	count=14997
+Total loss:	0.013 (rec:0.013, round:0.000)	b=2.00	count=19996
+Reconstruction for layer layer2.1.conv2
+Init alpha to be FP32
+Total loss:	41.825 (rec:0.017, round:41.807)	b=18.88	count=4999
+Total loss:	19.129 (rec:0.017, round:19.111)	b=13.25	count=9998
+Total loss:	3.663 (rec:0.018, round:3.645)	b=7.63	count=14997
+Total loss:	0.019 (rec:0.019, round:0.000)	b=2.00	count=19996
+Reconstruction for layer layer3.0.conv1
+Init alpha to be FP32
+Total loss:	132.920 (rec:0.027, round:132.893)	b=18.88	count=4999
+Total loss:	79.378 (rec:0.029, round:79.349)	b=13.25	count=9998
+Total loss:	21.534 (rec:0.035, round:21.499)	b=7.63	count=14997
+Total loss:	0.036 (rec:0.036, round:0.000)	b=2.00	count=19996
+Reconstruction for layer layer3.0.conv2
+Init alpha to be FP32
+Total loss:	251.655 (rec:0.010, round:251.645)	b=18.88	count=4999
+Total loss:	151.501 (rec:0.012, round:151.489)	b=13.25	count=9998
+Total loss:	39.826 (rec:0.014, round:39.812)	b=7.63	count=14997
+Total loss:	0.015 (rec:0.015, round:0.000)	b=2.00	count=19996
+Reconstruction for layer layer3.0.downsample.0
+Init alpha to be FP32
+Total loss:	13.766 (rec:0.006, round:13.760)	b=18.88	count=4999
+Total loss:	8.611 (rec:0.007, round:8.604)	b=13.25	count=9998
+Total loss:	2.360 (rec:0.008, round:2.352)	b=7.63	count=14997
+Total loss:	0.012 (rec:0.012, round:0.000)	b=2.00	count=19996
+Reconstruction for layer layer3.1.conv1
+Init alpha to be FP32
+Total loss:	260.255 (rec:0.020, round:260.235)	b=18.88	count=4999
+Total loss:	162.336 (rec:0.019, round:162.317)	b=13.25	count=9998
+Total loss:	51.180 (rec:0.024, round:51.156)	b=7.63	count=14997
+Total loss:	0.027 (rec:0.027, round:0.000)	b=2.00	count=19996
+Reconstruction for layer layer3.1.conv2
+Init alpha to be FP32
+Total loss:	222.415 (rec:0.004, round:222.411)	b=18.88	count=4999
+Total loss:	134.046 (rec:0.004, round:134.042)	b=13.25	count=9998
+Total loss:	37.188 (rec:0.005, round:37.184)	b=7.63	count=14997
+Total loss:	0.005 (rec:0.005, round:0.000)	b=2.00	count=19996
+Reconstruction for layer layer4.0.conv1
+Init alpha to be FP32
+Total loss:	543.331 (rec:0.071, round:543.261)	b=18.88	count=4999
+Total loss:	351.100 (rec:0.076, round:351.025)	b=13.25	count=9998
+Total loss:	133.269 (rec:0.080, round:133.188)	b=7.63	count=14997
+Total loss:	0.099 (rec:0.099, round:0.000)	b=2.00	count=19996
+Reconstruction for layer layer4.0.conv2
+Init alpha to be FP32
+Total loss:	1013.982 (rec:0.019, round:1013.963)	b=18.88	count=4999
+Total loss:	650.634 (rec:0.020, round:650.614)	b=13.25	count=9998
+Total loss:	239.915 (rec:0.024, round:239.891)	b=7.63	count=14997
+Total loss:	0.028 (rec:0.028, round:0.000)	b=2.00	count=19996
+Reconstruction for layer layer4.0.downsample.0
+Init alpha to be FP32
+Total loss:	57.657 (rec:0.009, round:57.648)	b=18.88	count=4999
+Total loss:	38.473 (rec:0.011, round:38.463)	b=13.25	count=9998
+Total loss:	13.211 (rec:0.014, round:13.197)	b=7.63	count=14997
+Total loss:	0.018 (rec:0.018, round:0.000)	b=2.00	count=19996
+Reconstruction for layer layer4.1.conv1
+Init alpha to be FP32
+Total loss:	1062.827 (rec:0.045, round:1062.781)	b=18.88	count=4999
+Total loss:	702.527 (rec:0.051, round:702.477)	b=13.25	count=9998
+Total loss:	291.002 (rec:0.055, round:290.947)	b=7.63	count=14997
+Total loss:	0.063 (rec:0.063, round:0.001)	b=2.00	count=19996
+Reconstruction for layer layer4.1.conv2
+Init alpha to be FP32
+Total loss:	971.112 (rec:0.005, round:971.106)	b=18.88	count=4999
+Total loss:	662.805 (rec:0.005, round:662.800)	b=13.25	count=9998
+Total loss:	258.755 (rec:0.006, round:258.749)	b=7.63	count=14997
+Total loss:	0.007 (rec:0.006, round:0.000)	b=2.00	count=19996
+Reconstruction for layer fc
+Init alpha to be FP32
+Total loss:	86.306 (rec:8.624, round:77.681)	b=18.88	count=4999
+Total loss:	73.221 (rec:9.064, round:64.157)	b=13.25	count=9998
+Total loss:	61.238 (rec:9.306, round:51.932)	b=7.63	count=14997
+Total loss:	33.998 (rec:7.702, round:26.296)	b=2.00	count=19996
+evaluating: 65.56
+全连接层统计信息:
+  - 最大值: 1.0840506553649902
+  - 最小值: -0.266216516494751
+  - 均值: -2.267421095325517e-08
+  - 方差: 0.0050561935640871525
+图片已保存至: ../quant_fc.png
+(100000, 2, 200)
+total have 2 gpus, max gpu free memory is 79.24, which gpu id is 0
+1563 3125
+accuracy: 57.8900
+evaluating before AdaRound: 50.82
+Reconstruction for layer conv1
+Init alpha to be FP32
+Total loss:	0.774 (rec:0.002, round:0.772)	b=18.88	count=4999
+Total loss:	0.397 (rec:0.003, round:0.394)	b=13.25	count=9998
+Total loss:	0.155 (rec:0.005, round:0.150)	b=7.63	count=14997
+Total loss:	0.021 (rec:0.017, round:0.004)	b=2.00	count=19996
+Reconstruction for layer layer1.0.conv1
+Init alpha to be FP32
+Total loss:	8.163 (rec:0.001, round:8.162)	b=18.88	count=4999
+Total loss:	2.985 (rec:0.001, round:2.984)	b=13.25	count=9998
+Total loss:	0.326 (rec:0.001, round:0.325)	b=7.63	count=14997
+Total loss:	0.002 (rec:0.002, round:0.000)	b=2.00	count=19996
+Reconstruction for layer layer1.0.conv2
+Init alpha to be FP32
+Total loss:	13.471 (rec:0.000, round:13.471)	b=18.88	count=4999
+Total loss:	6.015 (rec:0.000, round:6.015)	b=13.25	count=9998
+Total loss:	0.540 (rec:0.000, round:0.540)	b=7.63	count=14997
+Total loss:	0.000 (rec:0.000, round:0.000)	b=2.00	count=19996
+Reconstruction for layer layer1.1.conv1
+Init alpha to be FP32
+Total loss:	14.858 (rec:0.001, round:14.858)	b=18.88	count=4999
+Total loss:	6.541 (rec:0.001, round:6.541)	b=13.25	count=9998
+Total loss:	0.517 (rec:0.001, round:0.517)	b=7.63	count=14997
+Total loss:	0.001 (rec:0.001, round:0.000)	b=2.00	count=19996
+Reconstruction for layer layer1.1.conv2
+Init alpha to be FP32
+Total loss:	13.479 (rec:0.000, round:13.479)	b=18.88	count=4999
+Total loss:	6.879 (rec:0.000, round:6.879)	b=13.25	count=9998
+Total loss:	1.062 (rec:0.000, round:1.062)	b=7.63	count=14997
+Total loss:	0.000 (rec:0.000, round:0.000)	b=2.00	count=19996
+Reconstruction for layer layer2.0.conv1
+Init alpha to be FP32
+Total loss:	30.614 (rec:0.002, round:30.612)	b=18.88	count=4999
+Total loss:	14.704 (rec:0.002, round:14.702)	b=13.25	count=9998
+Total loss:	1.547 (rec:0.003, round:1.544)	b=7.63	count=14997
+Total loss:	0.004 (rec:0.004, round:0.000)	b=2.00	count=19996
+Reconstruction for layer layer2.0.conv2
+Init alpha to be FP32
+Total loss:	57.390 (rec:0.000, round:57.389)	b=18.88	count=4999
+Total loss:	30.994 (rec:0.001, round:30.993)	b=13.25	count=9998
+Total loss:	5.235 (rec:0.001, round:5.234)	b=7.63	count=14997
+Total loss:	0.001 (rec:0.001, round:0.000)	b=2.00	count=19996
+Reconstruction for layer layer2.0.downsample.0
+Init alpha to be FP32
+Total loss:	3.092 (rec:0.001, round:3.091)	b=18.88	count=4999
+Total loss:	1.688 (rec:0.001, round:1.686)	b=13.25	count=9998
+Total loss:	0.407 (rec:0.002, round:0.405)	b=7.63	count=14997
+Total loss:	0.003 (rec:0.003, round:0.000)	b=2.00	count=19996
+Reconstruction for layer layer2.1.conv1
+Init alpha to be FP32
+Total loss:	59.634 (rec:0.003, round:59.631)	b=18.88	count=4999
+Total loss:	31.721 (rec:0.003, round:31.718)	b=13.25	count=9998
+Total loss:	5.419 (rec:0.004, round:5.415)	b=7.63	count=14997
+Total loss:	0.004 (rec:0.004, round:0.000)	b=2.00	count=19996
+Reconstruction for layer layer2.1.conv2
+Init alpha to be FP32
+Total loss:	54.417 (rec:0.001, round:54.416)	b=18.88	count=4999
+Total loss:	28.681 (rec:0.001, round:28.680)	b=13.25	count=9998
+Total loss:	5.863 (rec:0.001, round:5.862)	b=7.63	count=14997
+Total loss:	0.001 (rec:0.001, round:0.000)	b=2.00	count=19996
+Reconstruction for layer layer3.0.conv1
+Init alpha to be FP32
+Total loss:	125.485 (rec:0.008, round:125.477)	b=18.88	count=4999
+Total loss:	71.196 (rec:0.008, round:71.188)	b=13.25	count=9998
+Total loss:	14.344 (rec:0.011, round:14.333)	b=7.63	count=14997
+Total loss:	0.011 (rec:0.011, round:0.000)	b=2.00	count=19996
+Reconstruction for layer layer3.0.conv2
+Init alpha to be FP32
+Total loss:	239.508 (rec:0.003, round:239.505)	b=18.88	count=4999
+Total loss:	139.842 (rec:0.003, round:139.839)	b=13.25	count=9998
+Total loss:	31.819 (rec:0.004, round:31.815)	b=7.63	count=14997
+Total loss:	0.004 (rec:0.004, round:0.000)	b=2.00	count=19996
+Reconstruction for layer layer3.0.downsample.0
+Init alpha to be FP32
+Total loss:	13.322 (rec:0.002, round:13.320)	b=18.88	count=4999
+Total loss:	7.544 (rec:0.002, round:7.542)	b=13.25	count=9998
+Total loss:	1.514 (rec:0.003, round:1.510)	b=7.63	count=14997
+Total loss:	0.004 (rec:0.004, round:0.000)	b=2.00	count=19996
+Reconstruction for layer layer3.1.conv1
+Init alpha to be FP32
+Total loss:	246.354 (rec:0.005, round:246.349)	b=18.88	count=4999
+Total loss:	147.096 (rec:0.005, round:147.091)	b=13.25	count=9998
+Total loss:	36.716 (rec:0.006, round:36.709)	b=7.63	count=14997
+Total loss:	0.007 (rec:0.007, round:0.000)	b=2.00	count=19996
+Reconstruction for layer layer3.1.conv2
+Init alpha to be FP32
+Total loss:	232.804 (rec:0.001, round:232.803)	b=18.88	count=4999
+Total loss:	142.577 (rec:0.001, round:142.576)	b=13.25	count=9998
+Total loss:	42.836 (rec:0.001, round:42.834)	b=7.63	count=14997
+Total loss:	0.001 (rec:0.001, round:0.000)	b=2.00	count=19996
+Reconstruction for layer layer4.0.conv1
+Init alpha to be FP32
+Total loss:	515.130 (rec:0.019, round:515.112)	b=18.88	count=4999
+Total loss:	320.730 (rec:0.018, round:320.712)	b=13.25	count=9998
+Total loss:	100.580 (rec:0.022, round:100.558)	b=7.63	count=14997
+Total loss:	0.024 (rec:0.024, round:0.000)	b=2.00	count=19996
+Reconstruction for layer layer4.0.conv2
+Init alpha to be FP32
+Total loss:	974.184 (rec:0.005, round:974.179)	b=18.88	count=4999
+Total loss:	615.322 (rec:0.006, round:615.316)	b=13.25	count=9998
+Total loss:	212.923 (rec:0.007, round:212.916)	b=7.63	count=14997
+Total loss:	0.009 (rec:0.009, round:0.001)	b=2.00	count=19996
+Reconstruction for layer layer4.0.downsample.0
+Init alpha to be FP32
+Total loss:	54.803 (rec:0.003, round:54.800)	b=18.88	count=4999
+Total loss:	34.697 (rec:0.003, round:34.694)	b=13.25	count=9998
+Total loss:	9.683 (rec:0.005, round:9.678)	b=7.63	count=14997
+Total loss:	0.006 (rec:0.006, round:0.000)	b=2.00	count=19996
+Reconstruction for layer layer4.1.conv1
+Init alpha to be FP32
+Total loss:	1020.062 (rec:0.017, round:1020.045)	b=18.88	count=4999
+Total loss:	660.147 (rec:0.018, round:660.129)	b=13.25	count=9998
+Total loss:	252.227 (rec:0.021, round:252.206)	b=7.63	count=14997
+Total loss:	0.024 (rec:0.023, round:0.001)	b=2.00	count=19996
+Reconstruction for layer layer4.1.conv2
+Init alpha to be FP32
+Total loss:	967.681 (rec:0.003, round:967.678)	b=18.88	count=4999
+Total loss:	639.698 (rec:0.003, round:639.695)	b=13.25	count=9998
+Total loss:	246.335 (rec:0.003, round:246.332)	b=7.63	count=14997
+Total loss:	0.004 (rec:0.004, round:0.000)	b=2.00	count=19996
+Reconstruction for layer fc
+Init alpha to be FP32
+Total loss:	77.234 (rec:3.303, round:73.931)	b=18.88	count=4999
+Total loss:	62.560 (rec:3.028, round:59.532)	b=13.25	count=9998
+Total loss:	49.262 (rec:2.814, round:46.448)	b=7.63	count=14997
+Total loss:	21.825 (rec:3.164, round:18.661)	b=2.00	count=19996
+evaluating: 57.86
+全连接层统计信息:
+  - 最大值: 0.8783289194107056
+  - 最小值: -0.19405728578567505
+  - 均值: -2.1222948731747238e-08
+  - 方差: 0.0043300301767885685
+图片已保存至: ../quant_fc.png
+(100000, 2, 200)
+total have 2 gpus, max gpu free memory is 79.24, which gpu id is 0
+1563 3125
+accuracy: 58.3900
+evaluating before AdaRound: 50.63
+Reconstruction for layer conv1
+Init alpha to be FP32
+Total loss:	0.866 (rec:0.002, round:0.864)	b=18.88	count=4999
+Total loss:	0.495 (rec:0.003, round:0.493)	b=13.25	count=9998
+Total loss:	0.185 (rec:0.006, round:0.180)	b=7.63	count=14997
+Total loss:	0.025 (rec:0.022, round:0.003)	b=2.00	count=19996
+Reconstruction for layer layer1.0.conv1
+Init alpha to be FP32
+Total loss:	9.817 (rec:0.000, round:9.817)	b=18.88	count=4999
+Total loss:	4.149 (rec:0.000, round:4.149)	b=13.25	count=9998
+Total loss:	0.309 (rec:0.000, round:0.309)	b=7.63	count=14997
+Total loss:	0.001 (rec:0.001, round:0.000)	b=2.00	count=19996
+Reconstruction for layer layer1.0.conv2
+Init alpha to be FP32
+Total loss:	13.889 (rec:0.000, round:13.889)	b=18.88	count=4999
+Total loss:	6.420 (rec:0.000, round:6.420)	b=13.25	count=9998
+Total loss:	0.494 (rec:0.000, round:0.494)	b=7.63	count=14997
+Total loss:	0.000 (rec:0.000, round:0.000)	b=2.00	count=19996
+Reconstruction for layer layer1.1.conv1
+Init alpha to be FP32
+Total loss:	15.055 (rec:0.001, round:15.055)	b=18.88	count=4999
+Total loss:	6.586 (rec:0.001, round:6.585)	b=13.25	count=9998
+Total loss:	0.489 (rec:0.001, round:0.489)	b=7.63	count=14997
+Total loss:	0.001 (rec:0.001, round:0.000)	b=2.00	count=19996
+Reconstruction for layer layer1.1.conv2
+Init alpha to be FP32
+Total loss:	14.016 (rec:0.000, round:14.016)	b=18.88	count=4999
+Total loss:	7.320 (rec:0.000, round:7.320)	b=13.25	count=9998
+Total loss:	1.073 (rec:0.000, round:1.073)	b=7.63	count=14997
+Total loss:	0.000 (rec:0.000, round:0.000)	b=2.00	count=19996
+Reconstruction for layer layer2.0.conv1
+Init alpha to be FP32
+Total loss:	30.962 (rec:0.002, round:30.960)	b=18.88	count=4999
+Total loss:	15.304 (rec:0.002, round:15.301)	b=13.25	count=9998
+Total loss:	1.568 (rec:0.003, round:1.565)	b=7.63	count=14997
+Total loss:	0.003 (rec:0.003, round:0.000)	b=2.00	count=19996
+Reconstruction for layer layer2.0.conv2
+Init alpha to be FP32
+Total loss:	58.071 (rec:0.000, round:58.070)	b=18.88	count=4999
+Total loss:	31.227 (rec:0.000, round:31.227)	b=13.25	count=9998
+Total loss:	5.026 (rec:0.001, round:5.025)	b=7.63	count=14997
+Total loss:	0.001 (rec:0.001, round:0.000)	b=2.00	count=19996
+Reconstruction for layer layer2.0.downsample.0
+Init alpha to be FP32
+Total loss:	3.073 (rec:0.001, round:3.073)	b=18.88	count=4999
+Total loss:	1.827 (rec:0.001, round:1.825)	b=13.25	count=9998
+Total loss:	0.442 (rec:0.002, round:0.440)	b=7.63	count=14997
+Total loss:	0.003 (rec:0.003, round:0.000)	b=2.00	count=19996
+Reconstruction for layer layer2.1.conv1
+Init alpha to be FP32
+Total loss:	60.164 (rec:0.002, round:60.162)	b=18.88	count=4999
+Total loss:	32.092 (rec:0.002, round:32.090)	b=13.25	count=9998
+Total loss:	5.469 (rec:0.003, round:5.466)	b=7.63	count=14997
+Total loss:	0.004 (rec:0.004, round:0.000)	b=2.00	count=19996
+Reconstruction for layer layer2.1.conv2
+Init alpha to be FP32
+Total loss:	53.954 (rec:0.001, round:53.953)	b=18.88	count=4999
+Total loss:	29.339 (rec:0.001, round:29.338)	b=13.25	count=9998
+Total loss:	6.582 (rec:0.001, round:6.581)	b=7.63	count=14997
+Total loss:	0.001 (rec:0.001, round:0.000)	b=2.00	count=19996
+Reconstruction for layer layer3.0.conv1
+Init alpha to be FP32
+Total loss:	125.573 (rec:0.008, round:125.565)	b=18.88	count=4999
+Total loss:	70.827 (rec:0.008, round:70.819)	b=13.25	count=9998
+Total loss:	14.403 (rec:0.011, round:14.392)	b=7.63	count=14997
+Total loss:	0.011 (rec:0.011, round:0.000)	b=2.00	count=19996
+Reconstruction for layer layer3.0.conv2
+Init alpha to be FP32
+Total loss:	240.041 (rec:0.003, round:240.038)	b=18.88	count=4999
+Total loss:	138.950 (rec:0.003, round:138.947)	b=13.25	count=9998
+Total loss:	31.208 (rec:0.004, round:31.204)	b=7.63	count=14997
+Total loss:	0.005 (rec:0.004, round:0.000)	b=2.00	count=19996
+Reconstruction for layer layer3.0.downsample.0
+Init alpha to be FP32
+Total loss:	13.205 (rec:0.002, round:13.203)	b=18.88	count=4999
+Total loss:	7.506 (rec:0.002, round:7.504)	b=13.25	count=9998
+Total loss:	1.505 (rec:0.003, round:1.502)	b=7.63	count=14997
+Total loss:	0.004 (rec:0.004, round:0.000)	b=2.00	count=19996
+Reconstruction for layer layer3.1.conv1
+Init alpha to be FP32
+Total loss:	245.955 (rec:0.005, round:245.950)	b=18.88	count=4999
+Total loss:	146.183 (rec:0.005, round:146.178)	b=13.25	count=9998
+Total loss:	36.151 (rec:0.006, round:36.144)	b=7.63	count=14997
+Total loss:	0.007 (rec:0.007, round:0.000)	b=2.00	count=19996
+Reconstruction for layer layer3.1.conv2
+Init alpha to be FP32
+Total loss:	233.069 (rec:0.001, round:233.068)	b=18.88	count=4999
+Total loss:	143.172 (rec:0.001, round:143.171)	b=13.25	count=9998
+Total loss:	43.609 (rec:0.001, round:43.608)	b=7.63	count=14997
+Total loss:	0.001 (rec:0.001, round:0.000)	b=2.00	count=19996
+Reconstruction for layer layer4.0.conv1
+Init alpha to be FP32
+Total loss:	513.296 (rec:0.017, round:513.279)	b=18.88	count=4999
+Total loss:	319.014 (rec:0.017, round:318.997)	b=13.25	count=9998
+Total loss:	99.266 (rec:0.020, round:99.246)	b=7.63	count=14997
+Total loss:	0.023 (rec:0.022, round:0.000)	b=2.00	count=19996
+Reconstruction for layer layer4.0.conv2
+Init alpha to be FP32
+Total loss:	971.481 (rec:0.005, round:971.476)	b=18.88	count=4999
+Total loss:	612.621 (rec:0.005, round:612.616)	b=13.25	count=9998
+Total loss:	212.110 (rec:0.006, round:212.103)	b=7.63	count=14997
+Total loss:	0.009 (rec:0.008, round:0.000)	b=2.00	count=19996
+Reconstruction for layer layer4.0.downsample.0
+Init alpha to be FP32
+Total loss:	54.680 (rec:0.003, round:54.677)	b=18.88	count=4999
+Total loss:	34.337 (rec:0.003, round:34.334)	b=13.25	count=9998
+Total loss:	9.521 (rec:0.005, round:9.516)	b=7.63	count=14997
+Total loss:	0.006 (rec:0.006, round:0.000)	b=2.00	count=19996
+Reconstruction for layer layer4.1.conv1
+Init alpha to be FP32
+Total loss:	1018.439 (rec:0.016, round:1018.423)	b=18.88	count=4999
+Total loss:	659.111 (rec:0.018, round:659.094)	b=13.25	count=9998
+Total loss:	250.415 (rec:0.019, round:250.395)	b=7.63	count=14997
+Total loss:	0.023 (rec:0.022, round:0.001)	b=2.00	count=19996
+Reconstruction for layer layer4.1.conv2
+Init alpha to be FP32
+Total loss:	965.285 (rec:0.003, round:965.282)	b=18.88	count=4999
+Total loss:	638.489 (rec:0.003, round:638.486)	b=13.25	count=9998
+Total loss:	245.985 (rec:0.003, round:245.982)	b=7.63	count=14997
+Total loss:	0.005 (rec:0.004, round:0.001)	b=2.00	count=19996
+Reconstruction for layer fc
+Init alpha to be FP32
+Total loss:	77.310 (rec:3.105, round:74.205)	b=18.88	count=4999
+Total loss:	62.850 (rec:2.799, round:60.051)	b=13.25	count=9998
+Total loss:	49.485 (rec:2.602, round:46.884)	b=7.63	count=14997
+Total loss:	21.770 (rec:2.986, round:18.784)	b=2.00	count=19996
+evaluating: 58.15
+全连接层统计信息:
+  - 最大值: 0.8504543304443359
+  - 最小值: -0.18863210082054138
+  - 均值: -2.081622341165712e-08
+  - 方差: 0.004276990424841642
+图片已保存至: ../quant_fc.png
+(100000, 2, 200)
+total have 2 gpus, max gpu free memory is 79.24, which gpu id is 0
+1563 3125
+accuracy: 58.3900
+total have 2 gpus, max gpu free memory is 79.24, which gpu id is 0
+1563 3125
+accuracy: 58.3900
+total have 2 gpus, max gpu free memory is 79.24, which gpu id is 0
+1563 3125
+accuracy: 58.3900
+conv1
+bn1
+relu
+maxpool
+layer1
+layer2
+layer3
+layer4
+avgpool
+fc

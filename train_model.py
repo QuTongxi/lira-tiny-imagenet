@@ -22,8 +22,7 @@ def select_best_gpu():
 
 
 available_device = select_best_gpu()
-
-# 方法1：直接通过os全局设置GPU    
+   
 import os
 if available_device.startswith("cuda"):
     os.environ['CUDA_VISIBLE_DEVICES'] = available_device.split(":")[1]
@@ -47,7 +46,7 @@ from wide_resnet import WideResNet
 import matplotlib.pyplot as plt
 
 import sys; sys.path.append('./tiny_imagenet')
-from TinyImagenet import * # type: ignore
+from TinyImagenet import *
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--lr", default=0.1, type=float)
@@ -145,7 +144,7 @@ def run():
 
     _, val_ds = random_split(train_ds, [0.8, 0.2])
     train_dl = DataLoader(train_ds, batch_size=128, shuffle=True, num_workers=4)
-    val_dl = DataLoader(val_ds, batch_size=128, shuffle=True, num_workers=4)
+    val_dl = DataLoader(val_ds, batch_size=128, shuffle=False, num_workers=4)
     test_dl = DataLoader(test_ds, batch_size=128, shuffle=False, num_workers=4)
 
     # Model

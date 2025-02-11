@@ -10,6 +10,13 @@ from quant import *
 from data.imagenet import build_imagenet_data
 import pytorch_lightning as pl
 
+import sys; sys.path.append('../tiny_imagenet')
+from TinyImagenet import *
+
+available_device = select_best_gpu()
+if available_device.startswith("cuda"):
+    os.environ['CUDA_VISIBLE_DEVICES'] = available_device.split(":")[1]
+
 def seed_all(seed=1029):
     # random.seed(seed)
     # os.environ['PYTHONHASHSEED'] = str(seed)
@@ -155,7 +162,7 @@ if __name__ == '__main__':
     parser.add_argument('--test_before_calibration', action='store_true')
 
     # weight calibration parameters
-    parser.add_argument('--num_samples', default=1024, type=int, help='size of the calibration dataset')
+    parser.add_argument('--num_samples', default=2048, type=int, help='size of the calibration dataset')
     parser.add_argument('--iters_w', default=20000, type=int, help='number of iteration for adaround')
     parser.add_argument('--weight', default=0.01, type=float, help='weight of rounding cost vs the reconstruction loss.')
     parser.add_argument('--sym', action='store_true', help='symmetric reconstruction, not recommended')
@@ -173,15 +180,25 @@ if __name__ == '__main__':
     parser.add_argument('--logit_save_path',type=str,default='../dat/')
     parser.add_argument('--nqueries',type=int,default=2)
 
+    parser.add_argument('--dataset',type=str,default='tiny-imagenet')
+
     args = parser.parse_args()
 
     seed_all(args.seed)
     # build imagenet data loader
-    train_loader, cali_loader, test_loader = build_imagenet_data(batch_size=args.batch_size, workers=args.workers,
-                                                    data_path=args.data_path, keep_file=args.keep)
+    cali_loader, test_loader = get_dataloaders(args.dataset, args.data_path, -1, args.batch_size, args.keep)
+    train_loader = get_train_dataloader(args.dataset, args.data_path, args.batch_size)
+
+    nclasses = 0
+    if args.dataset == 'tiny-imagenet':
+        nclasses = 200
+    elif args.dataset == 'cifar10':
+        nclasses = 10
+    else:
+        raise NotImplementedError
 
     # load model
-    cnn = hubconf.resnet18(pretrained=False, num_classes=10)
+    cnn = hubconf.resnet18(pretrained=False, num_classes=nclasses)
     cnn.conv1 = nn.Conv2d(3, 64, kernel_size=3, stride=1, padding=1, bias=False)
     cnn.maxpool = nn.Identity()
     cnn.cuda()
@@ -272,7 +289,7 @@ if __name__ == '__main__':
     
     if args.save is not None:
         torch.save(qnn.state_dict(), args.save)
-        save_train_test_accuracy(qnn, train_loader, test_loader)
+        save_train_test_accuracy(qnn, cali_loader, test_loader)
             
     def run_inference(queries, train_dl, model, save_dir):
         model.eval()

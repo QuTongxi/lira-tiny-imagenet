@@ -50,19 +50,29 @@ parser.add_argument('--keep',type=str,default='')
 parser.add_argument('--logit_save_path',type=str,default='../dat/')
 parser.add_argument('--nqueries',type=int,default=2)
 
+parser.add_argument('--data_set',type=str,default='tiny-imagenet')
 
 args = parser.parse_args()
 
-trainloader, dataloader, testloader = get_loaders(
-    args.dataset, path=args.datapath,
-    batchsize=args.batchsize, workers=args.workers,
-    nsamples=args.nsamples, seed=args.seed,
-    noaug=args.noaug,
-    keep_file=args.keep
-)
-get_model, test, run = get_functions(args.model)
+import sys; sys.path.append('../tiny_imagenet')
+from TinyImagenet import *
 
-modelp = models.resnet18(weights=None, num_classes=10)
+available_device = select_best_gpu()
+if available_device.startswith("cuda"):
+    os.environ['CUDA_VISIBLE_DEVICES'] = available_device.split(":")[1]
+dataloader, testloader = get_dataloaders(args.data_set, args.datapath, args.nsamples, 32, args.keep)
+get_model, test, run = get_functions(args.model)
+trainloader = get_train_dataloader(args.data_set, args.datapath, 32)
+
+nclasses = 0
+if args.data_set == 'tiny-imagenet':
+    nclasses = 200
+elif args.data_set == 'cifar10':
+    nclasses = 10
+else:
+    raise NotImplementedError
+
+modelp = models.resnet18(weights=None, num_classes=nclasses)
 modelp.conv1 = nn.Conv2d(3, 64, kernel_size=3, stride=1, padding=1, bias=False)
 modelp.maxpool = nn.Identity()
     
@@ -79,10 +89,10 @@ if args.load.endswith('.pth'):
             tmp[l] = modelp.state_dict()[l]
     modelp.load_state_dict(tmp)
 
-modeld = models.resnet18(weights=None, num_classes=100)
+modeld = models.resnet18(weights=None, num_classes=nclasses)
 modeld.conv1 = nn.Conv2d(3, 64, kernel_size=3, stride=1, padding=1, bias=False)
 modeld.maxpool = nn.Identity()
-# modeld.load_state_dict(torch.load('../cifar100/model.pt'))\
+
 modeld = copy.deepcopy(modelp)
 
 modelp = modelp.to(DEV)
@@ -318,7 +328,7 @@ def save_train_test_accuracy(model, trainloader, testloader):
         
 acc = test(modelp, testloader)
 torch.save(modelp.state_dict(), "tune_"+args.load)
-save_train_test_accuracy(modelp, trainloader, testloader)
+save_train_test_accuracy(modelp, dataloader, testloader)
     
 def run_inference(queries, train_dl, model, save_dir):
     model.eval()

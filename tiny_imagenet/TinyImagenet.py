@@ -7,14 +7,40 @@ import os
 from PIL import Image
 from torchvision.datasets import CIFAR10
 
-train_trans = transforms.Compose(
-        [
-            transforms.RandomHorizontalFlip(),
-            transforms.RandomCrop(64, padding=4),
-            transforms.ToTensor(),
-            transforms.Normalize((0.485,0.456,0.406), (0.229,0.224,0.225)),
-        ]
-    )
+_IMAGENET_RGB_MEANS = [0.4914, 0.4822, 0.4465]
+_IMAGENET_RGB_STDS = [0.2470, 0.2435, 0.2616]
+
+tiny_train_trans = transforms.Compose(
+    [
+        transforms.RandomHorizontalFlip(),
+        transforms.RandomCrop(64, padding=4),
+        transforms.ToTensor(),
+        transforms.Normalize((0.485,0.456,0.406), (0.229,0.224,0.225)),
+    ]
+)
+
+tiny_test_trans = transforms.Compose(
+    [
+        transforms.ToTensor(),
+        transforms.Normalize((0.485,0.456,0.406), (0.229,0.224,0.225)),
+    ]
+)
+
+cifar10_train_trans = transforms.Compose(
+    [
+        transforms.RandomHorizontalFlip(),
+        transforms.RandomCrop(32, padding=4),
+        transforms.ToTensor(),
+        transforms.Normalize(_IMAGENET_RGB_MEANS, _IMAGENET_RGB_STDS),
+    ]
+)
+
+cifar10_test_trans = transforms.Compose(
+    [
+        transforms.ToTensor(),
+        transforms.Normalize(_IMAGENET_RGB_MEANS, _IMAGENET_RGB_STDS),
+    ]
+)
 
 class TinyImageNet(Dataset):
     def __init__(self, root, train=True, transform=None):
@@ -129,24 +155,7 @@ class TinyImageNet(Dataset):
         return sample, tgt
 
 def get_cifar10_loaders(dpath:str, nsamples:int, batchsize:int, keep_file:str):
-    _IMAGENET_RGB_MEANS = [0.4914, 0.4822, 0.4465]
-    _IMAGENET_RGB_STDS = [0.2470, 0.2435, 0.2616]
-    train_transform = transforms.Compose(
-        [
-            transforms.RandomHorizontalFlip(),
-            transforms.RandomCrop(32, padding=4),
-            transforms.ToTensor(),
-            transforms.Normalize(_IMAGENET_RGB_MEANS, _IMAGENET_RGB_STDS),
-        ]
-    )
-    test_transform = transforms.Compose(
-        [
-            transforms.ToTensor(),
-            transforms.Normalize(_IMAGENET_RGB_MEANS, _IMAGENET_RGB_STDS),
-        ]
-    )
-
-    train_dataset = CIFAR10(root=dpath, train=True, download=True, transform=train_transform)
+    train_dataset = CIFAR10(root=dpath, train=True, download=True, transform=cifar10_train_trans)
     assert keep_file is not None
     
     if keep_file is not None:        
@@ -155,46 +164,36 @@ def get_cifar10_loaders(dpath:str, nsamples:int, batchsize:int, keep_file:str):
         cali_dataset = torch.utils.data.Subset(train_dataset, keep)
         
       
-    val_dataset = CIFAR10(root=dpath, train=False, download=True, transform=test_transform)
+    val_dataset = CIFAR10(root=dpath, train=False, download=True, transform=cifar10_test_trans)
     def random_subset(data, nsamples):
         idx = np.arange(len(data))
         np.random.shuffle(idx)
         return Subset(data, idx[:nsamples])
-    cali_dataset = random_subset(cali_dataset, nsamples)
+    if nsamples != -1:
+        cali_dataset = random_subset(cali_dataset, nsamples)
 
-    cali_loader = DataLoader(cali_dataset, batch_size=batchsize, shuffle=True,num_workers=4, pin_memory=True)
+    cali_loader = DataLoader(cali_dataset, batch_size=batchsize, shuffle=False,num_workers=4, pin_memory=True)
     val_loader = DataLoader(val_dataset,batch_size=batchsize, shuffle=False,num_workers=4, pin_memory=True)   
     return cali_loader, val_loader
 
 def get_tiny_imagenet_loaders(dpath:str, nsamples:int, batchsize:int, keep_file:str):
-    train_transform = transforms.Compose(
-        [
-            transforms.RandomHorizontalFlip(),
-            transforms.RandomCrop(64, padding=4),
-            transforms.ToTensor(),
-            transforms.Normalize((0.485,0.456,0.406), (0.229,0.224,0.225)),
-        ]
-    )
-    test_transform = transforms.Compose(
-        [
-            transforms.ToTensor(),
-            transforms.Normalize((0.485,0.456,0.406), (0.229,0.224,0.225)),
-        ]
-    )
-    train_dataset = TinyImageNet(dpath, train=True, transform=train_transform)
-    test_dataset = TinyImageNet(dpath, train=False, transform=test_transform)
-    assert keep_file is not None
+    train_dataset = TinyImageNet(dpath, train=True, transform=tiny_train_trans)
+    test_dataset = TinyImageNet(dpath, train=False, transform=tiny_test_trans)
+    # assert keep_file is not None
     
     if keep_file is not None:        
         keep_bool = np.load(keep_file)
         keep = np.where(keep_bool)[0]
         cali_dataset = torch.utils.data.Subset(train_dataset, keep)
+    else:
+        cali_dataset = train_dataset
         
     def random_subset(data, nsamples):
         idx = np.arange(len(data))
         np.random.shuffle(idx)
         return Subset(data, idx[:nsamples])
-    cali_dataset = random_subset(cali_dataset, nsamples)
+    if nsamples != -1:
+        cali_dataset = random_subset(cali_dataset, nsamples)
 
     cali_loader = DataLoader(cali_dataset, batch_size=batchsize, shuffle=True,num_workers=4, pin_memory=True)
     test_loader = DataLoader(test_dataset,batch_size=batchsize, shuffle=False,num_workers=4, pin_memory=True)   
@@ -208,6 +207,33 @@ def get_dataloaders(dataset:str, dpath:str, nsamples:int, batchsize:int, keep_fi
     else:
         raise NotImplementedError
 
+def get_train_dataloader(dataset:str, dpath:str, batchsize:int):
+    if dataset == 'cifar10':
+        train_set = CIFAR10(root=dpath, train=True,transform=cifar10_train_trans)
+        train_loader = DataLoader(train_set, batch_size=batchsize, shuffle=False,num_workers=4, pin_memory=True)
+        return train_loader
+    elif dataset == 'tiny-imagenet':
+        train_set = TinyImageNet(dpath, train=True, transform=tiny_train_trans)
+        train_loader = DataLoader(train_set, batch_size=batchsize, shuffle=False,num_workers=4, pin_memory=True)
+        return train_loader
+    else:
+        raise NotImplementedError    
 
-
+def select_best_gpu():
+    import pynvml
+    pynvml.nvmlInit()  # 初始化
+    gpu_count = pynvml.nvmlDeviceGetCount()
+    if gpu_count == 0:
+        device = "cpu"
+    else:
+        gpu_id, max_free_mem = 0, 0.
+        for i in range(gpu_count):
+            handle = pynvml.nvmlDeviceGetHandleByIndex(i)
+            memory_free = round(pynvml.nvmlDeviceGetMemoryInfo(handle).free/(1024*1024*1024), 3)  # 单位GB
+            if memory_free > max_free_mem:
+                gpu_id = i
+                max_free_mem = memory_free
+        device = f"cuda:{gpu_id}"
+        print(f"total have {gpu_count} gpus, max gpu free memory is {max_free_mem}, which gpu id is {gpu_id}")
+    return device
     

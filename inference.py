@@ -79,6 +79,8 @@ def run():
                 m.maxpool = nn.Identity()
             elif args.dataset == 'tiny-imagenet':
                 m = models.resnet18(weights=None, num_classes=200)
+                m.conv1 = nn.Conv2d(3, 64, kernel_size=3, stride=1, padding=1, bias=False)
+                m.maxpool = nn.Identity()
             else:
                 raise NotImplementedError
         else:

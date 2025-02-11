@@ -27,7 +27,6 @@ def select_best_gpu():
 available_device = select_best_gpu()
 
 # 方法1：直接通过os全局设置GPU    
-import os
 if available_device.startswith("cuda"):
     os.environ['CUDA_VISIBLE_DEVICES'] = available_device.split(":")[1]
 
@@ -67,8 +66,10 @@ model.eval()
 import sys; sys.path.append('../tiny_imagenet')
 from TinyImagenet import *
 
-caliloader, testloader = get_dataloaders(args.dataset, args.datapath, nsamples=1024, batchsize=32, keep_file = args.keep)
-trainloader = TinyImageNet(root=args.datapath, train=True, transform=train_trans)
+caliloader, testloader = get_dataloaders(args.dataset, args.datapath, nsamples=-1, batchsize=32, keep_file = args.keep)
+trainloader = get_train_dataloader(args.dataset, dpath=args.datapath, batchsize=32)
+
+print(len(caliloader), len(trainloader))
 
 print(f'accuracy: {get_acc(model, testloader):.4f}')
 
@@ -114,6 +115,55 @@ model.eval()
 # recalibrate_batchnorm(model, caliloader)
 accu = get_acc(model, testloader)
 print(f'evaluating: {accu:.2f}')
+
+def print_fc_stats(fc_layer):
+    # 获取全连接层的权重
+    weights = fc_layer.weight.data
+
+    # 计算最大值、最小值、均值和方差
+    max_value = torch.max(weights).item()
+    min_value = torch.min(weights).item()
+    mean_value = torch.mean(weights).item()
+    var_value = torch.var(weights).item()
+
+    # 打印结果
+    print(f"全连接层统计信息:")
+    print(f"  - 最大值: {max_value}")
+    print(f"  - 最小值: {min_value}")
+    print(f"  - 均值: {mean_value}")
+    print(f"  - 方差: {var_value}")
+
+print_fc_stats(model.fc)
+
+import matplotlib.pyplot as plt
+
+def plot_fc_distribution(fc_layer, save_path=None):
+    """
+    以图片形式展示全连接层权重的数据分布。
+
+    参数:
+        fc_layer (nn.Linear): 全连接层对象。
+        save_path (str, optional): 图片保存路径。如果为 None，则直接显示图片。
+    """
+    # 获取全连接层的权重
+    weights = fc_layer.weight.data.cpu().numpy().flatten()
+
+    # 绘制直方图
+    plt.figure(figsize=(10, 6))
+    plt.hist(weights, bins=100, color='blue', alpha=0.7, edgecolor='black')
+    plt.title("full connection", fontsize=16)
+    plt.xlabel("weights", fontsize=14)
+    plt.ylabel("frequency", fontsize=14)
+    plt.grid(True, linestyle='--', alpha=0.6)
+
+    # 保存或显示图片
+    if save_path:
+        plt.savefig(save_path, dpi=300, bbox_inches='tight')
+        print(f"图片已保存至: {save_path}")
+    else:
+        plt.show()
+
+plot_fc_distribution(model.fc, '../quant_fc.png')
 
 def save_train_test_accuracy(model, trainloader, testloader):
 

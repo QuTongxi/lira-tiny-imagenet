@@ -11,20 +11,26 @@ from modelutils import *
 from quant import *
 from trueobs import *
 
+import sys; sys.path.append('../tiny_imagenet')
+from TinyImagenet import *
+
+available_device = select_best_gpu()
+if available_device.startswith("cuda"):
+    os.environ['CUDA_VISIBLE_DEVICES'] = available_device.split(":")[1]
 
 parser = argparse.ArgumentParser()
 
 parser.add_argument('model', type=str)
-parser.add_argument('dataset', type=str)
+parser.add_argument('datset', type=str)
 parser.add_argument(
     'compress', type=str, choices=['quant', 'nmprune', 'unstr', 'struct', 'blocked']
 )
 parser.add_argument('--load', type=str, default='')
 parser.add_argument('--datapath', type=str, default='')
-parser.add_argument('--seed', type=int, default=0)
+parser.add_argument('--seed', type=int, default=42)
 parser.add_argument('--save', type=str, default='')
 
-parser.add_argument('--nsamples', type=int, default=1024)
+parser.add_argument('--nsamples', type=int, default=2048)
 parser.add_argument('--batchsize', type=int, default=-1)
 parser.add_argument('--workers', type=int, default=8)
 parser.add_argument('--nrounds', type=int, default=-1)
@@ -51,15 +57,20 @@ parser.add_argument('--keep',type=str,default='')
 parser.add_argument('--logit_save_path',type=str,default='../dat/')
 parser.add_argument('--nqueries',type=int,default=2)
 
+parser.add_argument('--data_set',type=str,default='tiny-imagenet')
+
 args = parser.parse_args()
 
-trainloader, dataloader, testloader = get_loaders(
-    args.dataset, path=args.datapath, 
-    batchsize=args.batchsize, workers=args.workers,
-    nsamples=args.nsamples, seed=args.seed,
-    noaug=args.noaug,
-    keep_file=args.keep
-)
+dataloader, testloader = get_dataloaders(args.data_set, args.datapath, args.nsamples, 32, args.keep)
+
+nclasses = 0
+if args.data_set == 'tiny-imagenet':
+    nclasses = 200
+elif args.data_set == 'cifar10':
+    nclasses = 10
+else:
+    raise NotImplementedError
+
 if args.nrounds == -1:
     args.nrounds = 1 if 'yolo' in args.model or 'bert' in args.model else 10 
     if args.noaug:
@@ -69,20 +80,27 @@ get_model, test, run = get_functions(args.model)
 aquant = args.compress == 'quant' and args.abits < 32
 wquant = args.compress == 'quant' and args.wbits < 32
 
-modelp = models.resnet18(weights=None, num_classes=10)
+modelp = models.resnet18(weights=None, num_classes=nclasses)
 modelp.conv1 = nn.Conv2d(3, 64, kernel_size=3, stride=1, padding=1, bias=False)
 modelp.maxpool = nn.Identity()
-modelp.cuda()
 
-modeld = models.resnet18(weights=None, num_classes=10)
+modeld = models.resnet18(weights=None, num_classes=nclasses)
 modeld.conv1 = nn.Conv2d(3, 64, kernel_size=3, stride=1, padding=1, bias=False)
 modeld.maxpool = nn.Identity()
-modeld.cuda()
+
 if args.compress == 'quant' and args.load:
     modelp.load_state_dict(torch.load(args.load))
     modeld.load_state_dict(torch.load(args.load))
 if aquant:
     add_actquant(modelp)
+
+modelp.cuda()
+modelp.eval()
+modeld.cuda()
+modeld.eval()
+
+test(modelp, testloader)
+test(modeld, testloader)
 
 layersp = find_layers(modelp)
 layersd = find_layers(modeld)
@@ -116,10 +134,16 @@ for name in layersp:
             args.abits, sym=args.asym, mse=not args.aminmax
         )
     if wquant:
-        trueobs[name].quantizer = Quantizer()
-        trueobs[name].quantizer.configure(
-            args.wbits, perchannel=not args.wperweight, sym=not args.wasym, mse=not args.wminmax
-        )
+        if 'fc' in name:
+            trueobs[name].quantizer = Quantizer()
+            trueobs[name].quantizer.configure(
+                args.wbits, perchannel=not args.wperweight, sym=not args.wasym, mse=not args.wminmax
+            )
+        else:
+            trueobs[name].quantizer = Quantizer()
+            trueobs[name].quantizer.configure(
+                args.wbits, perchannel=not args.wperweight, sym=not args.wasym, mse=not args.wminmax
+            )
 
 if not (args.compress == 'quant' and not wquant):
     cache = {}
@@ -194,9 +218,24 @@ if aquant:
 
 if args.save:
     torch.save(modelp.state_dict(), args.save)
-    # with open('helper.txt', 'a') as f:
-    #     f.writelines(f'Model_ W{args.wbits}A32 accuracy: {test(modelp, testloader):.2f}\n')
 
 else:
     test(modelp, testloader)
 
+def save_train_test_accuracy(model, trainloader, testloader):
+
+    def get_acc(model, dl):
+        model.eval()
+        acc = []
+        for x, y in dl:
+            x, y = x.cuda(), y.cuda()
+            acc.append(torch.argmax(model(x), dim=1) == y)
+        acc = torch.cat(acc)
+        acc = torch.sum(acc) / len(acc)
+        return acc.item()
+    train_acc = get_acc(model, trainloader)
+    test_acc = get_acc(model, testloader)
+    with open('helper.txt', 'a') as f:
+        f.writelines(f'Raw Model train accuracy: {train_acc:.4f} test accuracy: {test_acc:.4f}\n') 
+
+save_train_test_accuracy(modelp, dataloader, testloader)

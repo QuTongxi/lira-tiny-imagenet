@@ -1,0 +1,74 @@
+You are using fake SyncBatchNorm2d who is actually the official BatchNorm2d
+total have 2 gpus, max gpu free memory is 79.24, which gpu id is 0
+Setting the first and the last layer to 8-bit
+Ignore reconstruction of layer conv1
+Reconstruction for block 0
+Init alpha to be FP32
+Init alpha to be FP32
+Total loss:	200.302 (rec:0.003, round:200.298)	b=18.88	count=4999
+Total loss:	70.247 (rec:0.002, round:70.244)	b=13.25	count=9998
+Total loss:	6.109 (rec:0.003, round:6.106)	b=7.63	count=14997
+Total loss:	0.004 (rec:0.004, round:0.000)	b=2.00	count=19996
+Reconstruction for block 1
+Init alpha to be FP32
+Init alpha to be FP32
+Total loss:	255.903 (rec:0.006, round:255.898)	b=18.88	count=4999
+Total loss:	90.376 (rec:0.007, round:90.370)	b=13.25	count=9998
+Total loss:	9.365 (rec:0.008, round:9.357)	b=7.63	count=14997
+Total loss:	0.008 (rec:0.008, round:0.000)	b=2.00	count=19996
+Reconstruction for block 0
+Init alpha to be FP32
+Init alpha to be FP32
+Init alpha to be FP32
+Total loss:	804.429 (rec:0.021, round:804.408)	b=18.88	count=4999
+Total loss:	300.409 (rec:0.023, round:300.386)	b=13.25	count=9998
+Total loss:	33.481 (rec:0.035, round:33.446)	b=7.63	count=14997
+Total loss:	0.059 (rec:0.058, round:0.001)	b=2.00	count=19996
+Reconstruction for block 1
+Init alpha to be FP32
+Init alpha to be FP32
+Total loss:	958.135 (rec:0.031, round:958.104)	b=18.88	count=4999
+Total loss:	386.873 (rec:0.028, round:386.845)	b=13.25	count=9998
+Total loss:	67.814 (rec:0.029, round:67.785)	b=7.63	count=14997
+Total loss:	0.030 (rec:0.030, round:0.000)	b=2.00	count=19996
+Reconstruction for block 0
+Init alpha to be FP32
+Init alpha to be FP32
+Init alpha to be FP32
+Total loss:	3594.138 (rec:0.026, round:3594.112)	b=18.88	count=4999
+Total loss:	1875.370 (rec:0.023, round:1875.347)	b=13.25	count=9998
+Total loss:	396.363 (rec:0.030, round:396.333)	b=7.63	count=14997
+Total loss:	0.036 (rec:0.035, round:0.000)	b=2.00	count=19996
+Reconstruction for block 1
+Init alpha to be FP32
+Init alpha to be FP32
+Total loss:	4612.082 (rec:0.043, round:4612.039)	b=18.88	count=4999
+Total loss:	2472.903 (rec:0.042, round:2472.862)	b=13.25	count=9998
+Total loss:	601.740 (rec:0.042, round:601.698)	b=7.63	count=14997
+Total loss:	0.045 (rec:0.045, round:0.000)	b=2.00	count=19996
+Reconstruction for block 0
+Init alpha to be FP32
+Init alpha to be FP32
+Init alpha to be FP32
+Total loss:	15420.242 (rec:0.048, round:15420.194)	b=18.88	count=4999
+Total loss:	8729.956 (rec:0.040, round:8729.916)	b=13.25	count=9998
+Total loss:	2441.037 (rec:0.044, round:2440.993)	b=7.63	count=14997
+Total loss:	0.056 (rec:0.051, round:0.004)	b=2.00	count=19996
+Reconstruction for block 1
+Init alpha to be FP32
+Init alpha to be FP32
+Total loss:	25825.762 (rec:16.202, round:25809.561)	b=18.88	count=4999
+Total loss:	17721.275 (rec:11.409, round:17709.867)	b=13.25	count=9998
+Total loss:	8830.430 (rec:11.504, round:8818.926)	b=7.63	count=14997
+Total loss:	20.001 (rec:14.608, round:5.393)	b=2.00	count=19996
+Reconstruction for layer fc
+Init alpha to be FP32
+Total loss:	471.661 (rec:2.162, round:469.499)	b=18.88	count=4999
+Total loss:	230.988 (rec:1.852, round:229.136)	b=13.25	count=9998
+Total loss:	82.435 (rec:2.029, round:80.406)	b=7.63	count=14997
+Total loss:	1.971 (rec:1.915, round:0.056)	b=2.00	count=19996
+Test: [  0/157]	Time  0.247 ( 0.247)	Acc@1  54.69 ( 54.69)	Acc@5  82.81 ( 82.81)
+Test: [100/157]	Time  0.007 ( 0.010)	Acc@1  50.00 ( 56.68)	Acc@5  78.12 ( 78.23)
+ * Acc@1 56.920 Acc@5 78.480
+Weight quantization accuracy: 56.91999816894531
+(100000, 2, 200)
